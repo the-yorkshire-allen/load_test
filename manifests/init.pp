@@ -8,5 +8,4 @@ class load_test {
   include random_files
   include random_services_packages
   include random_users
-  include random_groups
 }
