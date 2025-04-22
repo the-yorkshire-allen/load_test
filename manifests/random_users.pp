@@ -97,7 +97,7 @@ class load_test::random_users (
     # Create group resource
     group { "test_group_${department}_${i}":
       ensure => $ensure,
-      name   => $department,
+      name   => "test_group_${department}_${i}",
       gid    => $gid,
       system => $is_system,
     }
@@ -175,7 +175,7 @@ class load_test::random_users (
     # Create user resource
     user { "test_user_${username}_${i}":
       ensure           => $ensure,
-      name             => $username,
+      name             => "test_user_${username}_${i}",
       uid              => $uid,
       gid              => $primary_group,
       groups           => $groups,
