@@ -25,8 +25,8 @@
 #   }
 #
 class load_test::random_services_packages (
-  Integer[0] $service_count        = 50,
-  Integer[0] $package_count        = 200,
+  Integer[0] $service_count        = 20,
+  Integer[0] $package_count        = 50,
   Float[0.0, 1.0] $service_ensure_ratio = 0.8,
   Float[0.0, 1.0] $package_ensure_ratio = 0.9,
   Float[0.0, 1.0] $service_enable_ratio = 0.7,

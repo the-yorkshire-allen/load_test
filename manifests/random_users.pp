@@ -29,7 +29,7 @@
 #   }
 #
 class load_test::random_users (
-  Integer[0] $user_count           = 50,
+  Integer[0] $user_count           = 20,
   Integer[0] $group_count          = 20,
   Float[0.0, 1.0] $create_homes    = 0.8,
   Float[0.0, 1.0] $system_user_ratio = 0.3,
