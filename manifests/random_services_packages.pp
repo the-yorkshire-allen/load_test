@@ -134,7 +134,7 @@ class load_test::random_services_packages (
     package { "test_package_${package_name}_${i}":
       ensure => $ensure ? {
         'absent' => 'absent',
-        default  => $version,
+        default  => 'installed',
       },
       name   => "test_package_${package_name}_${i}",
     }
