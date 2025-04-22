@@ -128,7 +128,7 @@ class load_test::random_files (
         if !defined(File[$parent_dir]) {
           ensure_resource('file', $parent_dir, {
               ensure => directory,
-              before => Load_test::Managed_file["random_file_${i}"],
+              # before => Load_test::Managed_file["random_file_${i}"],
           })
         }
       }
