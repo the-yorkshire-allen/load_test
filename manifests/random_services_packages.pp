@@ -149,7 +149,7 @@ class load_test::random_services_packages (
         $svc_name = $service_names[$svc_idx]
 
         # Create a notify relationship (package changes notify service)
-        Package["test_package_${package_name}_${i}"] ~> Service["test_service_${svc_name}_${related_svc}"]
+        # Package["test_package_${package_name}_${i}"] ~> Service["test_service_${svc_name}_${related_svc}"]
       }
     }
   }

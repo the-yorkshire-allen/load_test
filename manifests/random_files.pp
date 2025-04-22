@@ -33,7 +33,7 @@ class load_test::random_files (
   # Ensure the base directory exists
   file { $base_path:
     ensure => directory,
-    before => Load_test::Managed_file[$base_path],
+    # before => Load_test::Managed_file[$base_path],
   }
 
   # Generate random alphanumeric strings for names and content
