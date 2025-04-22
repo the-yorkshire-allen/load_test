@@ -125,10 +125,12 @@ class load_test::random_files (
 
       $parent_dirs.each |$parent_dir| {
         # Ensure parent directories exist
-        ensure_resource('file', $parent_dir, {
-            ensure => directory,
-            before => Load_test::Managed_file["random_file_${i}"],
-        })
+        if !defined($parent_dir) {
+          ensure_resource('file', $parent_dir, {
+              ensure => directory,
+              before => Load_test::Managed_file["random_file_${i}"],
+          })
+        }
       }
     }
   }
