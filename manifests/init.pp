@@ -5,7 +5,7 @@
 # @example
 #   include load_test
 class load_test {
-  include random_files
-  include random_services_packages
-  include random_users
+  include load_test::random_files
+  include load_test::random_services_packages
+  include load_test::random_users
 }
