@@ -116,22 +116,5 @@ class load_test::random_files (
       },
       force   => fqdn_rand(2, "${i}_force") == 0,
     }
-
-    # If we're creating subdirectories, make sure parent directories exist
-    if $create_subdirs {
-      $parent_dirs = reduce(split($rel_path, '/'), [$base_path]) |$memo, $dir| {
-        $memo + ["${memo[-1]}/${dir}"]
-      }
-
-      $parent_dirs.each |$parent_dir| {
-        # Ensure parent directories exist
-        if !defined(File[$parent_dir]) {
-          ensure_resource('file', $parent_dir, {
-              ensure => directory,
-              # before => Load_test::Managed_file["random_file_${i}"],
-          })
-        }
-      }
-    }
   }
 }
