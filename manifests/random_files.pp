@@ -119,13 +119,13 @@ class load_test::random_files (
 
     # If we're creating subdirectories, make sure parent directories exist
     if $create_subdirs {
-      $parent_dirs = reduce(split($rel_path, '/')) |$memo, $dir| {
-        join(memo, ["${memo[-1]}/${dir}"])
+      $parent_dirs = reduce(split($rel_path, '/'), [$base_path]) |$memo, $dir| {
+        $memo + ["${memo[-1]}/${dir}"]
       }
 
       $parent_dirs.each |$parent_dir| {
         # Ensure parent directories exist
-        ensure_resource('file', "${base_path}${parent_dir}", {
+        ensure_resource('file', $parent_dir, {
             ensure => directory,
             before => Load_test::Managed_file["random_file_${i}"],
         })
