@@ -99,7 +99,7 @@ class load_test::random_services_packages (
     # Create service resource
     service { "test_service_${service_name}_${i}":
       ensure     => $ensure,
-      name       => $service_name,
+      name       => "test_service_${service_name}_${i}",
       enable     => $is_enabled,
       provider   => $provider,
       hasstatus  => $hasstatus,
