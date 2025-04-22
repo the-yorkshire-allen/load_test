@@ -120,7 +120,7 @@ class load_test::random_files (
     # If we're creating subdirectories, make sure parent directories exist
     if $create_subdirs {
       $parent_dirs = reduce(split($rel_path, '/')) |$memo, $dir| {
-        $memo + ["${memo[-1]}/${dir}"]
+        join(memo, ["${memo[-1]}/${dir}"])
       }
 
       $parent_dirs.each |$parent_dir| {
