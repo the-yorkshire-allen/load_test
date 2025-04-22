@@ -132,13 +132,11 @@ class load_test::random_services_packages (
 
     # Create package resource
     package { "test_package_${package_name}_${i}":
-      ensure  => $ensure,
-      name    => "test_package_${package_name}_${i}",
-      # Only include version if it's defined and ensure is not 'absent'
-      version => $ensure ? {
-        'absent' => undef,
+      ensure => $ensure ? {
+        'absent' => 'absent',
         default  => $version,
       },
+      name   => "test_package_${package_name}_${i}",
     }
 
     # If delay_random is true, create some dependencies between packages and services
