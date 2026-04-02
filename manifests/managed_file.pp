@@ -3,7 +3,7 @@
 # A description of what this defined type does
 #
 # @example
-#   load_test::managed_files { 'namevar': }
+#   load_test::managed_file { 'namevar': }
 define load_test::managed_file (
   Enum['file', 'directory', 'absent'] $ensure = 'file',
   Optional[String] $path              = undef,
