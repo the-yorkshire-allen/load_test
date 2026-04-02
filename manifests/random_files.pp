@@ -24,7 +24,7 @@
 #
 class load_test::random_files (
   Integer[1] $count                = 30,
-  String $base_path                = '/tmp/puppet_test',
+  Optional[String] $base_path      = undef,
   Float[0.0, 1.0] $file_ratio      = 0.7,
   Integer[10, 10000] $max_content_length = 1000,
   Boolean $create_subdirs          = true,

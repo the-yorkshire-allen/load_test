@@ -1,0 +1,2 @@
+---
+load_test::random_files::base_path: 'c:\tmp\puppet_test'
