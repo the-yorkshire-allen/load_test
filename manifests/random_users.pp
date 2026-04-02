@@ -193,7 +193,7 @@ class load_test::random_users (
       $key_type = fqdn_rand(4, "${i}_key_type") ? {
         0       => 'ssh-rsa',
         1       => 'rsa',
-        2       => 'ecdsa',
+        2       => 'ecdsa-sha2-nistp521',
         default => 'ed25519',
       }
 
