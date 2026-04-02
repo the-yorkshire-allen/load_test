@@ -10,7 +10,7 @@ define load_test::managed_user (
   Optional[String] $home = undef,
   Optional[Integer] $uid = undef,
   Optional[String] $gid = undef,
-  Array[String] $groups = [],
+  Optional[Array[String]] $groups = undef,
   Boolean $managehome = true,
   String $shell = '/bin/bash',
   Boolean $system = false,

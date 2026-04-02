@@ -167,7 +167,10 @@ class load_test::random_users (
       fqdn_rand(size($departments), "${i}_group_${g}")
     }
     $group_list = $group_idxs.map |$g| { $departments[$g] }
-    $groups = $group_list.unique  # Remove duplicates
+    $groups = $facts['os']['name'] == 'windows' ? {
+      true    => undef,
+      default => $group_list.unique,  # Remove duplicates
+    }
 
     # SSH key generation
     $has_ssh_key = fqdn_rand(100, "${i}_has_ssh") < ($create_ssh_keys * 100)
