@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'load_test::managed_files' do
+describe 'load_test::managed_file' do
   let(:title) { 'namevar' }
   let(:params) do
     {}
