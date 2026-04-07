@@ -130,12 +130,14 @@ class load_test::random_services_packages (
       false => undef,
     }
 
+    case $ensure {
+      'absent': { $ensure_real = 'absent' }
+      default:  { $ensure_real = 'installed' }
+    }
+
     # Create package resource
     package { "test_package_${package_name}_${i}":
-      ensure => $ensure ? {
-        'absent' => 'absent',
-        default  => 'installed',
-      },
+      ensure => $ensure_real,
       name   => "test_package_${package_name}_${i}",
     }
 

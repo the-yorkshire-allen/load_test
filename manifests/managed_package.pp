@@ -5,6 +5,10 @@
 # @example
 #   load_test::managed_package { 'namevar': }
 # Create a defined type for managed packages
+#
+# @param ensure
+# @param source
+# @param provider
 define load_test::managed_package (
   Variant[Enum['present', 'installed', 'absent', 'purged', 'held', 'latest'], String] $ensure = 'installed',
   Optional[String] $source = undef,

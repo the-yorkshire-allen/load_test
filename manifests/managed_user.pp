@@ -4,6 +4,18 @@
 #
 # @example
 #   include load_test::managed_user
+#
+# @param ensure
+# @param comment
+# @param home
+# @param uid
+# @param gid
+# @param groups
+# @param managehome
+# @param shell
+# @param system
+# @param password_max_age
+# @param purge_ssh_keys
 define load_test::managed_user (
   Enum['present', 'absent'] $ensure = 'present',
   Optional[String] $comment = undef,
