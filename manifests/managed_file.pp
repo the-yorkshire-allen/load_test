@@ -3,7 +3,17 @@
 # A description of what this defined type does
 #
 # @example
-#   load_test::managed_files { 'namevar': }
+#   load_test::managed_file { 'namevar': }
+#
+# @param ensure
+# @param path
+# @param owner
+# @param group
+# @param mode
+# @param content
+# @param source
+# @param recurse
+# @param force
 define load_test::managed_file (
   Enum['file', 'directory', 'absent'] $ensure = 'file',
   Optional[String] $path              = undef,
@@ -39,27 +49,35 @@ define load_test::managed_file (
     warning('Content parameter is ignored for directories')
   }
 
+  $content_real = $ensure ? {
+    'file'  => $content,
+    default => undef,
+  }
+
+  $source_real = $ensure ? {
+    'file'  => $source,
+    default => undef,
+  }
+
+  $recurse_real = $ensure ? {
+    'directory' => $recurse,
+    default     => undef,
+  }
+
+  $force_real = $ensure ? {
+    'absent' => $force,
+    default  => undef,
+  }
+
   # Create the file resource with appropriate parameters
   file { $_path:
     ensure  => $ensure,
     owner   => $owner,
     group   => $group,
     mode    => $_mode,
-    content => $ensure ? {
-      'file'  => $content,
-      default => undef,
-    },
-    source  => $ensure ? {
-      'file'  => $source,
-      default => undef,
-    },
-    recurse => $ensure ? {
-      'directory' => $recurse,
-      default     => undef,
-    },
-    force   => $ensure ? {
-      'absent' => $force,
-      default  => undef,
-    },
+    content => $content_real,
+    source  => $source_real,
+    recurse => $recurse_real,
+    force   => $force_real,
   }
 }

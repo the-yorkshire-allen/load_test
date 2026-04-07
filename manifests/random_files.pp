@@ -24,7 +24,7 @@
 #
 class load_test::random_files (
   Integer[1] $count                = 30,
-  String $base_path                = '/tmp/puppet_test',
+  Optional[String] $base_path      = undef,
   Float[0.0, 1.0] $file_ratio      = 0.7,
   Integer[10, 10000] $max_content_length = 1000,
   Boolean $create_subdirs          = true,
@@ -36,10 +36,9 @@ class load_test::random_files (
     # before => Load_test::Managed_file[$base_path],
   }
 
-  # Generate random alphanumeric strings for names and content
-  $alphanumeric = ['a','b','c','d','e','f','g','h','i','j','k','l','m',
-    'n','o','p','q','r','s','t','u','v','w','x','y','z',
-  '0','1','2','3','4','5','6','7','8','9']
+  # Define possible paths and content
+  $paths = ['bin', 'boot', 'etc', 'lib', 'lib64', 'media', 'opt', 'root', 'sbin',
+  'sys',  'usr', 'dev', 'home', 'mnt', 'proc', 'run', 'srv', 'tmp', 'var']
 
   # Define possible owners and groups
   $owners = ['root', 'nobody', 'daemon', 'www-data', 'apache']
@@ -51,12 +50,12 @@ class load_test::random_files (
 
   # Generate random resources
   range(1, $count).each |$i| {
-    # Generate a random name
-    $name_length = fqdn_rand(10, "${i}_name") + 5  # 5-15 characters
-    $name_chars = range(1, $name_length).map |$n| {
-      $alphanumeric[fqdn_rand(size($alphanumeric), "${i}_name_${n}")]
+    # Pick a random name for filename and path
+    $path = $paths[fqdn_rand(size($paths), "${i}_seed1")]
+    $full_path = $create_subdirs ? {
+      true  => "${base_path}/${path}/${path}-${i}",
+      false => "${base_path}/${path}-${i}",
     }
-    $name = join($name_chars, '')
 
     # Decide if this should be a file or directory
     $is_file = fqdn_rand(100, "${i}_type") < ($file_ratio * 100)
@@ -65,31 +64,10 @@ class load_test::random_files (
       false => 'directory',
     }
 
-    # Generate a random path
-    if $create_subdirs {
-      $depth = fqdn_rand($max_depth, "${i}_depth") + 1
-      $path_parts = range(1, $depth).map |$d| {
-        $part_length = fqdn_rand(8, "${i}_path_${d}") + 3
-        $part_chars = range(1, $part_length).map |$p| {
-          $alphanumeric[fqdn_rand(size($alphanumeric), "${i}_path_${d}_${p}")]
-        }
-        join($part_chars, '')
-      }
-      $rel_path = join($path_parts, '/')
-      $full_path = "${base_path}/${rel_path}"
-    } else {
-      $full_path = "${base_path}/${name}"
-    }
-
-    # Generate random content for files
-    if $is_file {
-      $content_length = fqdn_rand($max_content_length, "${i}_content") + 10
-      $content_chars = range(1, $content_length).map |$c| {
-        $alphanumeric[fqdn_rand(size($alphanumeric), "${i}_content_${c}")]
-      }
-      $content = join($content_chars, '')
-    } else {
-      $content = undef
+    # Use filename as content for files
+    $content = $is_file ? {
+      true  => $full_path,
+      false => undef,
     }
 
     # Select random owner and group
@@ -102,6 +80,11 @@ class load_test::random_files (
       false => $dir_modes[fqdn_rand(size($dir_modes), "${i}_mode")],
     }
 
+    $recurse_real = $ensure ? {
+      'directory' => fqdn_rand(2, "${i}_recurse") == 0,
+      default     => false,
+    }
+
     # Create a random managed_file resource
     load_test::managed_file { "random_file_${i}":
       ensure  => $ensure,
@@ -110,10 +93,7 @@ class load_test::random_files (
       group   => $group,
       mode    => $mode,
       content => $content,
-      recurse => $ensure ? {
-        'directory' => fqdn_rand(2, "${i}_recurse") == 0,
-        default     => false,
-      },
+      recurse => $recurse_real,
       force   => fqdn_rand(2, "${i}_force") == 0,
     }
   }

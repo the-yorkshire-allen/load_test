@@ -5,6 +5,12 @@
 # @example
 #   load_test::managed_service { 'namevar': }
 # Create a defined type for managed services
+#
+# @param ensure
+# @param enable
+# @param provider
+# @param hasstatus
+# @param hasrestart
 define load_test::managed_service (
   Enum['running', 'stopped'] $ensure = 'running',
   Boolean $enable = true,
