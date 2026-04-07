@@ -1,1 +1,2 @@
---- {}
+---
+load_test::random_files::base_path: '/tmp/puppet_test'
