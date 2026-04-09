@@ -8,6 +8,9 @@ describe 'load_test' do
       let(:facts) { os_facts }
 
       it { is_expected.to compile.with_all_deps }
+      it { is_expected.to contain_class('load_test::random_files') }
+      it { is_expected.to contain_class('load_test::random_services_packages') }
+      it { is_expected.to contain_class('load_test::random_users') }
     end
   end
 end

@@ -2,12 +2,14 @@
 
 require 'spec_helper'
 
-describe 'load_test::managed_user' do
+describe 'load_test::random_services_packages' do
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) { os_facts }
 
       it { is_expected.to compile.with_all_deps }
+      it { is_expected.to have_service_resource_count(20) }
+      it { is_expected.to have_package_resource_count(50) }
     end
   end
 end
