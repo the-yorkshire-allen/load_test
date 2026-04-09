@@ -24,7 +24,7 @@
 #
 class load_test::random_files (
   Integer[1] $count                = 30,
-  String $base_path                = '/tmp/puppet_test',
+  Optional[String] $base_path      = undef,
   Float[0.0, 1.0] $file_ratio      = 0.7,
   Integer[10, 10000] $max_content_length = 1000,
   Boolean $create_subdirs          = true,
@@ -102,6 +102,11 @@ class load_test::random_files (
       false => $dir_modes[fqdn_rand(size($dir_modes), "${i}_mode")],
     }
 
+    $recurse_real = $ensure ? {
+      'directory' => fqdn_rand(2, "${i}_recurse") == 0,
+      default     => false,
+    }
+
     # Create a random managed_file resource
     load_test::managed_file { "random_file_${i}":
       ensure  => $ensure,
@@ -110,10 +115,7 @@ class load_test::random_files (
       group   => $group,
       mode    => $mode,
       content => $content,
-      recurse => $ensure ? {
-        'directory' => fqdn_rand(2, "${i}_recurse") == 0,
-        default     => false,
-      },
+      recurse => $recurse_real,
       force   => fqdn_rand(2, "${i}_force") == 0,
     }
   }
