@@ -59,4 +59,17 @@ describe 'load_test' do
       end
     end
   end
+
+  on_supported_os.each do |os, os_facts|
+    context "on #{os} with scaling_facter set to valid 2.0" do
+      let(:facts) { os_facts }
+      let(:params) { { scale_factor: 2.42 } }
+
+      it { is_expected.to contain_class('load_test::random_files').with_count(73) }
+      it { is_expected.to contain_class('load_test::random_services_packages').with_service_count(48) }
+      it { is_expected.to contain_class('load_test::random_services_packages').with_package_count(121) }
+      it { is_expected.to contain_class('load_test::random_users').with_user_count(48) }
+      it { is_expected.to contain_class('load_test::random_users').with_group_count(48) }
+    end
+  end
 end

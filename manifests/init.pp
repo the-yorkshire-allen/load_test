@@ -5,6 +5,8 @@
 # @example
 #   include load_test
 #
+# @param scale_factor
+#   The integer to multiply the *_count with for quick scaling
 # @param file_count
 #   The number of file resources to create
 # @param service_count
@@ -56,6 +58,7 @@
 # @param uid_gid_max
 #   Maximum UID/GID to use for users and groups
 class load_test (
+  Float[0.1, 100] $scale_factor          = 1.0,
   Integer[1] $file_count                 = 30,
   Integer[1] $service_count              = 20,
   Integer[1] $package_count              = 50,
@@ -82,8 +85,14 @@ class load_test (
   Integer[1] $uid_gid_min                = 1000,
   Integer[1] $uid_gid_max                = 60000,
 ) {
+  $file_count_real    = round($scale_factor * $file_count)
+  $service_count_real = round($scale_factor * $service_count)
+  $package_count_real = round($scale_factor * $package_count)
+  $user_count_real    = round($scale_factor * $user_count)
+  $group_count_real   = round($scale_factor * $group_count)
+
   class { 'load_test::random_files':
-    count              => $file_count,
+    count              => $file_count_real,
     base_path          => $base_path,
     file_ratio         => $file_ratio,
     max_content_length => $max_content_length,
@@ -92,8 +101,8 @@ class load_test (
   }
 
   class { 'load_test::random_services_packages':
-    service_count        => $service_count,
-    package_count        => $package_count,
+    service_count        => $service_count_real,
+    package_count        => $package_count_real,
     service_ensure_ratio => $service_ensure_ratio,
     package_ensure_ratio => $package_ensure_ratio,
     service_enable_ratio => $service_enable_ratio,
@@ -102,8 +111,8 @@ class load_test (
   }
 
   class { 'load_test::random_users':
-    user_count        => $user_count,
-    group_count       => $group_count,
+    user_count        => $user_count_real,
+    group_count       => $group_count_real,
     create_homes      => $create_homes,
     system_user_ratio => $system_user_ratio,
     user_ensure_ratio => $user_ensure_ratio,
